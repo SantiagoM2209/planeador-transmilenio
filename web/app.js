@@ -14,6 +14,18 @@ async function post(ruta, cuerpo = {}) {
   return r.json();
 }
 
+// Si el servidor (python app.py) no está corriendo, los botones no pueden llamar al motor.
+window.addEventListener("unhandledrejection", (e) => {
+  if (!e.reason || e.reason.name !== "TypeError") return;
+  if ($("#sin-servidor")) return;
+  const aviso = document.createElement("div");
+  aviso.id = "sin-servidor";
+  aviso.className = "aviso mal";
+  aviso.style.cssText = "position:fixed;top:12px;left:50%;transform:translateX(-50%);z-index:99;max-width:90vw";
+  aviso.textContent = "No hay conexión con el servidor. Abre una terminal en la carpeta del proyecto, ejecuta  python app.py  y entra a http://localhost:8000";
+  document.body.appendChild(aviso);
+});
+
 let INFO = null;
 
 // ---------------------------------------------------------------- pestañas
