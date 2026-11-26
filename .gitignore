@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+gtfs/
+.claude/settings.local.json
+.claude/
+# Archivos de la carpeta original (no son parte de la entrega)
+/estaciones.csv
+/rutas.csv
+/horarios.csv
+*.pptx
