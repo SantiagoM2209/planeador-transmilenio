@@ -1,15 +1,14 @@
 # Integrantes
 
-Grupo de 3 o 4 personas. En la sustentación cada persona responde sobre un requisito que **no** hizo, así que esta tabla tiene que ser exacta.
+| Integrante | Partes a cargo |
+|---|---|
+| Santiago Montaño | Conversión GTFS (`convertir_gtfs.py`, `datos/`), estructuras base (`motor/estructuras.py`), app web (`app.py`, `web/`) |
+| Camilo Romero | R1, R2, R3: `estado`, `autocompletar`, `rango` |
+| Simón Troncoso | R4, R5, R6: `proximo_bus`, `viaje`, `ranking` |
+| Mariam Ruiz | R7, R8, R9: `agregar_parada`, `quitar_parada`, `recorrido`, `cerrar`, `reabrir`, `deshacer`, `rehacer` |
+| Samuel Rueda | R10, R11, R12: `motor/simulacion.py`, `rendimiento.py`, pruebas (`tests/`) y README |
 
-| Integrante | Código | Correo | Requisitos que hizo |
-|---|---|---|---|
-| _Nombre 1_ | _código_ | _correo_ | _p. ej. R1, R2, R3 + conversión GTFS_ |
-| _Nombre 2_ | _código_ | _correo_ | _p. ej. R4, R5, R6_ |
-| _Nombre 3_ | _código_ | _correo_ | _p. ej. R7, R8, R9_ |
-| _Nombre 4 (opcional)_ | _código_ | _correo_ | _p. ej. R10, R11, R12 (README)_ |
-
-## Reparto sugerido por archivos
+## Dónde está cada parte
 
 | Parte | Archivos |
 |---|---|
