@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Planeador TransMilenio</title>
+<link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+<header class="barra">
+  <div class="marca">
+    <span class="logo" aria-hidden="true"></span>
+    <div>
+      <h1>Planeador TransMilenio</h1>
+      <p class="sub" id="resumen-red">Cargando red…</p>
+    </div>
+  </div>
+  <nav class="pestanas" role="tablist">
+    <button role="tab" data-vista="estaciones" class="activa">Estaciones</button>
+    <button role="tab" data-vista="viajar">Viajar</button>
+    <button role="tab" data-vista="ranking">Ranking</button>
+    <button role="tab" data-vista="operador">Operador</button>
+    <button role="tab" data-vista="fila">Fila</button>
+    <button role="tab" data-vista="rendimiento">Rendimiento</button>
+  </nav>
+</header>
+
+<main>
+  <!-- ============================ R1 R2 R3 ============================ -->
+  <section class="vista activa" id="v-estaciones">
+    <div class="rejilla dos">
+      <article class="tarjeta">
+        <header><span class="req">R1 · R2</span><h2>Buscar una estación</h2></header>
+        <p class="ayuda">Escribe: las sugerencias salen de <code>autocompletar(prefijo, k)</code>; al buscar se llama <code>estado(nombre)</code>.</p>
+        <div class="fila-form">
+          <div class="campo crece"><label for="buscar">Nombre</label><div class="auto" data-k-from="k-auto"><input id="buscar" autocomplete="off" placeholder="p. ej. CAL"></div></div>
+          <div class="campo angosto"><label for="k-auto">k</label><input id="k-auto" type="number" min="0" max="50" value="8"></div>
+          <button class="primario" id="btn-estado">Buscar</button>
+        </div>
+        <div id="res-estado" class="resultado" aria-live="polite"></div>
+      </article>
+
+      <article class="tarjeta">
+        <header><span class="req">R3</span><h2>Listar un rango</h2></header>
+        <p class="ayuda">Estaciones abiertas entre dos nombres, en orden alfabético (extremos incluidos).</p>
+        <div class="fila-form">
+          <div class="campo crece"><label for="desde">Desde</label><div class="auto"><input id="desde" value="CALLE 26" autocomplete="off"></div></div>
+          <div class="campo crece"><label for="hasta">Hasta</label><div class="auto"><input id="hasta" value="CALLE 80" autocomplete="off"></div></div>
+          <button class="primario" id="btn-rango">Listar</button>
+        </div>
+        <div id="res-rango" class="resultado"></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============================ R4 R5 ============================ -->
+  <section class="vista" id="v-viajar">
+    <div class="rejilla dos">
+      <article class="tarjeta">
+        <header><span class="req">R5</span><h2>Planear un viaje</h2></header>
+        <p class="ayuda">Directo o con un solo transbordo, el que pase por menos paradas. Las estaciones cerradas no cuentan.</p>
+        <div class="fila-form">
+          <div class="campo crece"><label for="origen">Origen</label><div class="auto"><input id="origen" value="PORTAL NORTE" autocomplete="off"></div></div>
+          <div class="campo crece"><label for="destino">Destino</label><div class="auto"><input id="destino" value="PORTAL SUR" autocomplete="off"></div></div>
+        </div>
+        <div class="fila-form">
+          <div class="campo"><label for="hora-viaje">Salgo a las</label><input id="hora-viaje" type="time" value="07:30"></div>
+          <button class="primario" id="btn-viaje">Planear</button>
+        </div>
+        <div id="res-viaje" class="resultado"></div>
+      </article>
+
+      <article class="tarjeta">
+        <header><span class="req">R4</span><h2>Próximo bus</h2></header>
+        <p class="ayuda">Búsqueda binaria en los horarios ordenados de esa ruta en esa estación.</p>
+        <div class="fila-form">
+          <div class="campo crece"><label for="pb-est">Estación</label><div class="auto"><input id="pb-est" value="RICAURTE" autocomplete="off"></div></div>
+        </div>
+        <div class="fila-form">
+          <div class="campo crece"><label for="pb-ruta">Ruta</label><select id="pb-ruta"></select></div>
+          <div class="campo"><label for="pb-hora">Hora</label><input id="pb-hora" type="time" value="07:30"></div>
+          <button class="primario" id="btn-pb">Consultar</button>
+        </div>
+        <div id="res-pb" class="resultado"></div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ============================ R6 ============================ -->
+  <section class="vista" id="v-ranking">
+    <article class="tarjeta">
+      <header><span class="req">R6</span><h2>Estaciones con más buses al día</h2></header>
+      <p class="ayuda">Arreglo ya ordenado por buses: la consulta lee los primeros k. Solo se reordena cuando se cierra, se reabre o se edita una ruta.</p>
+      <div class="fila-form">
+        <div class="campo"><label for="k-rank">k = <output id="k-rank-val">15</output></label><input id="k-rank" type="range" min="1" max="60" value="15"></div>
+      </div>
+      <ol id="res-ranking" class="barras"></ol>
+    </article>
+  </section>
+
+  <!-- ============================ R7 R8 R9 ============================ -->
+  <section class="vista" id="v-operador">
+    <div class="rejilla operador">
+      <article class="tarjeta">
+        <header><span class="req">R7</span><h2>Editar rutas</h2></header>
+        <div class="fila-form">
+          <div class="campo crece"><label for="op-ruta">Ruta</label><select id="op-ruta"></select></div>
+          <label class="interruptor"><input type="checkbox" id="op-reves"> Al revés</label>
+        </div>
+        <ol id="op-recorrido" class="recorrido"></ol>
+        <div class="fila-form separado">
+          <div class="campo crece"><label for="op-nueva">Agregar estación</label><div class="auto"><input id="op-nueva" autocomplete="off" placeholder="Nombre"></div></div>
+          <div class="campo crece"><label for="op-despues">Después de</label><select id="op-despues"></select></div>
+          <button class="primario" id="btn-agregar">Agregar</button>
+        </div>
+        <p class="ayuda">Haz clic en × para quitar una parada. Inserción y borrado: O(1) con la lista doble y la tabla (ruta, estación) → nodo.</p>
+        <div id="res-op" class="resultado"></div>
+      </article>
+
+      <div class="columna">
+        <article class="tarjeta">
+          <header><span class="req">R8</span><h2>Cerrar y reabrir</h2></header>
+          <div class="fila-form">
+            <div class="campo crece"><label for="op-est">Estación</label><div class="auto"><input id="op-est" autocomplete="off"></div></div>
+            <button class="peligro" id="btn-cerrar">Cerrar</button>
+          </div>
+          <h3 class="mini">Cerradas</h3>
+          <ul id="lista-cerradas" class="chips"></ul>
+        </article>
+
+        <article class="tarjeta">
+          <header><span class="req">R9</span><h2>Deshacer y rehacer</h2></header>
+          <div class="fila-form">
+            <button id="btn-deshacer">↶ Deshacer <span class="cuenta" id="n-deshacer">0</span></button>
+            <button id="btn-rehacer">↷ Rehacer <span class="cuenta" id="n-rehacer">0</span></button>
+          </div>
+          <p class="ayuda" id="ultima-op">Sin cambios todavía.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ R10 ============================ -->
+  <section class="vista" id="v-fila">
+    <article class="tarjeta">
+      <header><span class="req">R10</span><h2>Fila de abordaje en hora pico</h2></header>
+      <p class="ayuda">Cola FIFO con índice <code>frente</code>: los buses salen cada <em>f</em> minutos con cupo limitado y la gente sube en orden de llegada.</p>
+      <div class="fila-form">
+        <div class="campo"><label for="f-n">Pasajeros</label><input id="f-n" type="number" value="120000" min="1" max="2000000" step="1000"></div>
+        <div class="campo"><label for="f-dur">Duración (min)</label><input id="f-dur" type="number" value="60" min="1"></div>
+        <div class="campo"><label for="f-frec">Frecuencia (min)</label><input id="f-frec" type="number" value="0.1" min="0.1" step="0.1"></div>
+        <div class="campo"><label for="f-cap">Cupo por bus</label><input id="f-cap" type="number" value="160" min="1"></div>
+        <div class="campo"><label for="f-pat">Llegadas</label><select id="f-pat"><option value="pico">Pico al centro</option><option value="uniforme">Uniformes</option></select></div>
+        <button class="primario" id="btn-fila">Simular</button>
+      </div>
+      <div id="res-fila" class="resultado"></div>
+      <div id="graf-fila" class="grafica"></div>
+    </article>
+  </section>
+
+  <!-- ============================ R11 ============================ -->
+  <section class="vista" id="v-rendimiento">
+    <article class="tarjeta">
+      <header><span class="req">R11</span><h2>Panel de rendimiento</h2></header>
+      <p class="ayuda">Se copia la red real 1, 2, 4, 8… veces (n, 2n, 4n…) y se mide cada operación del motor. Línea sólida: tiempo medido. Punteada: la complejidad esperada, anclada en la primera medición. La columna <strong>t(2n)/t(n)</strong> es la prueba del profesor: duplicar y mirar.</p>
+      <div class="fila-form">
+        <fieldset class="factores"><legend>Tamaños</legend>
+          <label><input type="checkbox" value="1" checked> n</label>
+          <label><input type="checkbox" value="2" checked> 2n</label>
+          <label><input type="checkbox" value="4" checked> 4n</label>
+          <label><input type="checkbox" value="8" checked> 8n</label>
+          <label><input type="checkbox" value="16"> 16n</label>
+        </fieldset>
+        <button class="primario" id="btn-bench">Correr benchmarks</button>
+      </div>
+      <div id="bench-progreso" class="progreso" hidden><div class="barra-prog"><span></span></div><p></p></div>
+    </article>
+    <div id="bench-tabla"></div>
+    <div id="bench-graficas" class="rejilla tres"></div>
+  </section>
+</main>
+
+<script src="app.js"></script>
+</body>
+</html>
